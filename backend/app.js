@@ -11,6 +11,7 @@ const { login, registration } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const error = require('./middlewares/error-handler');
 const { registrationValidation, loginValidation } = require('./middlewares/celebrate-validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -23,6 +24,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+// подключаем логгер запросов
+app.use(requestLogger);
 
 // краш-тест. Удалить после ревью
 app.get('/crash-test', () => {
@@ -40,6 +43,8 @@ app.use(auth);
 app.use('/', userRouter);
 app.use('/', cardRouter);
 app.use('*', incorrectRouter);
+// подключаем логгер ошибок
+app.use(errorLogger);
 // мидлвэр - обработчик ошибок celebrate
 app.use(errors());
 // мидлвэр - центральный обработчик ошибок (должен быть в конце всех app.use):

@@ -1,0 +1,17 @@
+.popup__button-close {
+  background-color: transparent;
+  border: none;
+  align-self: flex-end;
+  padding: 0;
+  margin: 0 0 8px;
+  width: 32px;
+  height: 32px;
+}
+
+@media screen and (max-width: 670px) {
+  .popup__button-close{
+    width: 20px;
+    height: 20px;
+    margin-bottom: 16px;
+  }
+}

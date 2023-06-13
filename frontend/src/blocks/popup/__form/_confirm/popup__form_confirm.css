@@ -1,0 +1,10 @@
+.popup__form_confirm {
+  height: 181px;
+  padding: 36px;
+}
+
+@media screen and (max-width: 670px) {
+  .popup__form_confirm {
+    padding: 25px 22px 35px;
+  }
+}

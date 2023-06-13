@@ -1,0 +1,13 @@
+.cards__image {
+  width: 282px;
+  height: 282px;
+  object-fit: cover;
+  border-radius: 10px 10px 0% 0%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  margin: 0;
+}
+
+.cards__image:hover {
+  cursor: pointer;
+}

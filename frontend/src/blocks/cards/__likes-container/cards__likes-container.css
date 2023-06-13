@@ -1,0 +1,8 @@
+.cards__likes-container {
+  height: 38px;
+  margin: 0 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

@@ -1,0 +1,15 @@
+.page-form__button-save {
+    min-height: 50px;
+    width: 358px;
+    border: 0;
+    border-radius: 2px;
+    padding: 0;
+    background-color: #fff;
+    color: #000;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21.78px;
+    margin: 175px 0 0;
+}
+

@@ -1,0 +1,11 @@
+.cards__item {
+  width: 282px;
+  background-color: #fff;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: max-content min-content;
+  grid-template-rows: max-content min-content;
+  gap: 0;
+  position: relative;
+}
+

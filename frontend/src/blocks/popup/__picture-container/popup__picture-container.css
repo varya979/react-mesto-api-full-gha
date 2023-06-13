@@ -1,0 +1,4 @@
+.popup__picture-container {
+  display: flex;
+  flex-direction: column;
+}

@@ -121,7 +121,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "http://localhost:3000"
+  url: "https://api.varya-project.nomoredomains.rocks"
 });
 
 export default api;

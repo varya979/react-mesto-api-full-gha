@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
@@ -42,8 +42,7 @@ const login = (req, res, next) => {
       // Методом sign создаем токен. Методу мы передали три аргумента
       const token = jwt.sign(
         { _id: user._id }, // пейлоуд токена (зашифрованный в строку объект пользователя) - id
-        // NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', // секретный ключ подписи
-        'dev-secret',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', // секретный ключ подписи
         { expiresIn: '7d' }, // время, в течение которого токен остаётся действительным
       );
       res.status(200).send({ token });

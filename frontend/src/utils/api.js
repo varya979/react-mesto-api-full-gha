@@ -1,95 +1,127 @@
 class Api {
-  constructor(options) {
-    this._url = options.baseUrl;
-    this._headers = options.headers;
+  constructor({ url }) {
+    this._url = url;
   }
 
-  _checkAnswer(res) {
+  _checkResponse(res) {
     if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getUserInfo() {
-    return fetch(`${this._url}/users/me`, { headers: this._headers }).then(
-      (res) => {
-        return this._checkAnswer(res);
+  // GET '/users/me' - получение пользователя
+  getUser() {
+    const token = localStorage.getItem('jwt');
+    return fetch(`${this._url}/users/me`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      }
+    })
+    .then((res) => {
+        return this._checkResponse(res);
       }
     );
   }
 
-  patchUserInfo(data) {
+  // PATCH '/users/me' - обновление профиля пользователя
+  updateUser(data) {
+    const token = localStorage.getItem('jwt');
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         name: data.name,
         about: data.about,
       }),
     }).then((res) => {
-      return this._checkAnswer(res);
+      return this._checkResponse(res);
     });
   }
 
+  // GET '/cards' - получение всех карточек
   getCards() {
-    return fetch(`${this._url}/cards`, { headers: this._headers }).then(
+    const token = localStorage.getItem('jwt');
+    return fetch(`${this._url}/cards`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      }
+    })
+    .then(
       (res) => {
-        return this._checkAnswer(res);
+        return this._checkResponse(res);
       }
     );
   }
 
+  // POST '/cards' - новая карточка
   postCard(card) {
+    const token = localStorage.getItem('jwt');
     return fetch(`${this._url}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         name: card.name,
         link: card.link,
       }),
     }).then((res) => {
-      return this._checkAnswer(res);
+      return this._checkResponse(res);
     });
   }
 
-  deleteCard(card) {
-    return fetch(`${this._url}/cards/${card}`, {
+  // DELETE '/cards/:cardId' - удаление карточки
+  deleteCard(cardId) {
+    const token = localStorage.getItem('jwt');
+    return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     }).then((res) => {
-      return this._checkAnswer(res);
+      return this._checkResponse(res);
     });
   }
 
-  changeLikeCardStatus(card, isLiked) {
-    return fetch(`${this._url}/cards/${card}/likes`, {
+  // DELETE или PUT '/cards/:cardId/likes' - добавляет или удаляет лайк
+  updateLike(cardId, isLiked) {
+    const token = localStorage.getItem('jwt');
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: isLiked ? "DELETE" : "PUT",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     }).then((res) => {
-      return this._checkAnswer(res);
+      return this._checkResponse(res);
     });
   }
 
-  changeUserAvatar(data) {
+  // PATCH '/users/me/avatar' - обновляет аватар
+  updateAvatar(data) {
+    const token = localStorage.getItem('jwt');
     return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         avatar: data.avatar,
       }),
     }).then((res) => {
-      return this._checkAnswer(res);
+      return this._checkResponse(res);
     });
   }
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-54",
-  headers: {
-    authorization: "aabcb11b-8f59-4aaf-a42c-ed2259c463e8",
-    "Content-Type": "application/json",
-  },
+  url: "http://localhost:3000"
 });
 
 export default api;

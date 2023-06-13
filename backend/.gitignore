@@ -1,3 +1,4 @@
+
 # Logs
 logs
 *.log
@@ -13,3 +14,5 @@ node_modules
 .DS_Store
 .idea
 .vscode
+
+.env

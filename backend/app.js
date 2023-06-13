@@ -7,13 +7,12 @@ const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const incorrectRouter = require('./errors/incorrect-router');
-const { login, createUser } = require('./controllers/users');
+const { login, registration } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const error = require('./middlewares/error-handler');
-const { createUserValidation, loginValidation } = require('./middlewares/celebrate-validation');
+const { registrationValidation, loginValidation } = require('./middlewares/celebrate-validation');
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
 app.use(cors());
 
@@ -23,10 +22,17 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser()); // подключаем парсер кук как мидлвэр
+app.use(cookieParser());
+
+// краш-тест. Удалить после ревью
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 // роуты не требующие авторизации:
-app.post('/signup', createUserValidation, createUser);
+app.post('/signup', registrationValidation, registration);
 app.post('/signin', loginValidation, login);
 // авторизация для всего приложения:
 app.use(auth);

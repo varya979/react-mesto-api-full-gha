@@ -37,9 +37,12 @@ export default function App() {
 
   const navigate = useNavigate();
 
+  // Запрос к Api за инфо о пользователе выполняется единожды при монтировании
   React.useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
     api
-      .getUserInfo()
+      .getUser()
       .then((data) => {
         // console.log(data);
         setCurrentUser(data);
@@ -47,29 +50,48 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+    }
+  }, [loggedIn]);
 
+  // Запрос к Api за инфо о массиве карточек выполняется единожды при монтировании
   React.useEffect(() => {
-    api
-      .getCards()
-      .then((data) => {
-        //console.log(data);
-        setCards(data);
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      api
+        .getCards()
+        .then((data) => {
+          //console.log(data);
+          setCards(data.reverse());
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
+
+  // при монтировании App описан эффект, проверяющий наличие токена и его валидности
+  React.useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      auth
+      .checkToken(token)
+      .then((res) => {
+        setLoggedIn(true);
+        setEmail(res.email);
+        navigate("/");
       })
       .catch((err) => {
+        localStorage.removeItem('jwt');
         console.log(err);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    tokenCheck();
-  }, []);
+      })
+    }
+  }, [navigate]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
 
     api
-      .changeLikeCardStatus(card._id, isLiked)
+      .updateLike(card._id, isLiked)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -84,7 +106,7 @@ export default function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        setCards((cards) => cards.filter((c) => c._id !== card._id));
       })
       .catch((err) => {
         console.log(err);
@@ -93,7 +115,7 @@ export default function App() {
 
   function handleUpdateUser(data) {
     api
-      .patchUserInfo(data)
+      .updateUser(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -105,7 +127,7 @@ export default function App() {
 
   function handleUpdateAvatar(data) {
     api
-      .changeUserAvatar(data)
+      .updateAvatar(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -144,23 +166,12 @@ export default function App() {
       .then(() => {
         setSuccessRegistation(true);
         openInfoTooltipPopup();
-        navigate("/sign-in");
+        navigate("/signin");
       })
       .catch(() => {
         setSuccessRegistation(false);
         openInfoTooltipPopup();
       });
-  }
-
-  function tokenCheck() {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.getContent(jwt).then((res) => {
-        setLoggedIn(true);
-        setEmail(res.data.email);
-        navigate("/");
-      });
-    }
   }
 
   function signOut() {
@@ -211,7 +222,7 @@ export default function App() {
               component={
                 <>
                   <Header
-                    link="/sign-in"
+                    link="/signin"
                     loggedIn={loggedIn}
                     email={email}
                     linkName="Выйти"
@@ -233,13 +244,13 @@ export default function App() {
           }
         />
         <Route
-          path="/sign-up"
+          path="/signup"
           element={
             <Register handleRegister={handleRegister} loggedIn={loggedIn} />
           }
         />
         <Route
-          path="/sign-in"
+          path="/signin"
           element={<Login handleLogin={handleLogin} loggedIn={loggedIn} />}
         />
       </Routes>

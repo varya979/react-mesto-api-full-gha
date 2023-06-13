@@ -1,9 +1,9 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+const BASE_URL = "http://localhost:3000";
 
 const getResponse = (res) => {
   return res.ok
     ? res.json()
-    : Promise.reject(`${res.status} - ${res.statusText}`);
+    : Promise.reject(`Ошибка: ${res.status}`);
 };
 
 export const register = (password, email) => {
@@ -28,7 +28,8 @@ export const authorize = (password, email) => {
   }).then(getResponse);
 };
 
-export const getContent = (token) => {
+// проверка токена. Она и не нужна в 15 работе, т.к. url едина для всех запросов
+export const checkToken = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {

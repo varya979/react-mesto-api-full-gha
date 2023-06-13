@@ -13,3 +13,9 @@
     margin: 175px 0 0;
 }
 
+@media screen and (max-width: 670px) {
+  .page-form__button-save {
+    max-width: 238px;
+  }
+}
+

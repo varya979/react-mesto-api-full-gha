@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 // eslint-disable-next-line no-useless-escape
 const regex = /^(https?:\/\/)([\w.||\w\-||\w\/])*/;
 
-const createUserValidation = celebrate({
+const registrationValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -20,7 +20,7 @@ const loginValidation = celebrate({
   }),
 });
 
-const userIdValidation = celebrate({
+const getUserValidation = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().hex().length(24).required(),
   }),
@@ -28,8 +28,6 @@ const userIdValidation = celebrate({
 
 const updateUserProfileValidation = celebrate({
   body: Joi.object().keys({
-    // почему эти два поля должны быть обязательными?
-    // например, если пользователь захочет изменить лишь одно из них
     name: Joi.string().min(2).max(30).required(),
     about: Joi.string().min(2).max(30).required(),
   }),
@@ -55,9 +53,9 @@ const cardIdValidation = celebrate({
 });
 
 module.exports = {
-  createUserValidation,
+  registrationValidation,
   loginValidation,
-  userIdValidation,
+  getUserValidation,
   updateUserProfileValidation,
   updateUserAvatarValidation,
   createCardValidation,

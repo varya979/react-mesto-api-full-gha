@@ -26,7 +26,7 @@ export default function Register(props) {
 
   return (
     <>
-      <Header link="/sign-in" linkName="Войти" />
+      <Header link="/signin" linkName="Войти" />
       <PageForm
         handleSubmit={handleSubmit}
         title="Регистрация"
@@ -38,7 +38,7 @@ export default function Register(props) {
           !props.isLogin && (
             <p className="page-form__subtitle">
               Уже зарегистрированы?{" "}
-              <Link to="/sign-in" className="page-form__link opacity">
+              <Link to="/signin" className="page-form__link opacity">
                 Войти
               </Link>
             </p>

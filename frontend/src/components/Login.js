@@ -35,7 +35,7 @@ export default function Login(props) {
   }
   return (
     <>
-      <Header link="/sign-up" linkName="Регистрация" />
+      <Header link="/signup" linkName="Регистрация" />
       <PageForm
         title="Вход"
         submitButtonTitle="Войти"
